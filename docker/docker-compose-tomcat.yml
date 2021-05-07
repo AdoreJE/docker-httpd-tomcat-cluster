@@ -5,7 +5,7 @@ services:
     container_name: tomcat1
     build: ../tomcat/build1
     volumes:
-      - ../target/:/usr/local/tomcat/webapps/
+      - ../target/ROOT.war:/usr/local/tomcat/webapps/ROOT.war
       - ../tomcat/conf1/:/usr/local/tomcat/conf/
     expose:
       - "8009"
@@ -15,7 +15,7 @@ services:
     container_name: tomcat2
     build: ../tomcat/build2
     volumes:
-      - ../target/:/usr/local/tomcat/webapps/
+      - ../target/ROOT.war:/usr/local/tomcat/webapps/ROOT.war
       - ../tomcat/conf2/:/usr/local/tomcat/conf/
     expose:
       - "8019"
