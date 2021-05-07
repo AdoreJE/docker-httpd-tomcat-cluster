@@ -3,11 +3,6 @@ FROM centos:7
 RUN yum -y update && yum clean all
 RUN yum -y install httpd httpd-devel gcc* make && yum clean all
 
-#ADD ./test.sh /usr/local
-#RUN chmod 777 /usr/local/test.sh
-#ENTRYPOINT ["sh","/usr/local/test.sh"]
-#CMD ["/usr/local/test.sh"] && tail -f /dev/null
-
 # Install mod_jk
 RUN curl -SL https://downloads.apache.org/tomcat/tomcat-connectors/jk/tomcat-connectors-1.2.48-src.tar.gz -o tomcat-connectors-1.2.48-src.tar.gz \
     && mkdir -p /src/tomcat-connectors \
@@ -19,12 +14,11 @@ RUN curl -SL https://downloads.apache.org/tomcat/tomcat-connectors/jk/tomcat-con
     && cd / \
     && rm -rf src/ \
     && rm -f tomcat-connectors-1.2.48-src.tar.gz
-
-# mod_jk conf files
-#ADD mod_jk.conf /etc/httpd/conf.d/
-#ADD workers.properties /etc/httpd/conf.d/
-
 EXPOSE 80
+
+# Timezone
+RUN mv /etc/localtime /etc/localtime_org \
+    && ln -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 # Simple startup script to avoid some issues observed with container restart
 ADD run-httpd.sh /run-httpd.sh

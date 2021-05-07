@@ -12,19 +12,20 @@ ENV export PATH
 # Install tomcat
 RUN curl -SL  https://downloads.apache.org/tomcat/tomcat-9/v9.0.45/bin/apache-tomcat-9.0.45.tar.gz -o apache-tomcat-9.0.45.tar.gz \
   && mkdir -p /src/tomcat/ \
-	&& tar xzf apache-tomcat-9.0.45.tar.gz -C src/tomcat --strip-components=1 \
+  && tar xzf apache-tomcat-9.0.45.tar.gz -C src/tomcat --strip-components=1 \
   && cd / \
-	&& mv /src/tomcat /usr/local \
+  && mv /src/tomcat /usr/local \
   && rm -rf src/ \
   && rm -f apache-tomcat-9.0.45.tar.gz
 
 ENV CATALINA_HOME=/usr/local/tomcat
 ENV CATALINA_BASE=/usr/local/tomcat
+ADD ./setenv.sh /usr/local/tomcat/bin
 
-#ADD ./test.sh /usr/local
-#RUN chmod 777 /usr/local/test.sh
-#ENTRYPOINT ["sh", "/usr/local/test.sh"]
-#CMD ["/usr/local/test.sh"] && tail -f /dev/null
+# Timezone
+RUN mv /etc/localtime /etc/localtime_org \
+    && ln -s /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
 RUN rm -rf /usr/local/tomcat/webapps/*
 ENTRYPOINT ["/usr/local/tomcat/bin/catalina.sh", "run"]
  
